@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cellox - Minimal Tech Store</title>
+<style>
+  :root {
+    --page: #f5f5f7;
+    --surface: #ffffff;
+    --surface-soft: #fbfbfd;
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --line: rgba(0, 0, 0, 0.1);
+    --blue: #0071e3;
+    --blue-dark: #005bb5;
+    --green: #2f8f64;
+    --ink: #111113;
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--page);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: 48px;
+    background: rgba(245, 245, 247, 0.82);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(18px) saturate(180%);
+  }
+
+  .nav-inner {
+    max-width: 1120px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .brand {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: #38383d;
+    font-size: 12px;
+  }
+
+  .nav-links a.active {
+    color: #000;
+    font-weight: 700;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+
+  .icon-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .cart-count {
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--blue);
+    color: white;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+    margin-left: -10px;
+    display: none;
+  }
+
+  .cart-count.show {
+    display: inline-block;
+  }
+
+  .hero {
+    min-height: calc(100vh - 48px);
+    padding: 64px 22px 34px;
+    display: grid;
+    align-items: center;
+  }
+
+  .hero-inner {
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+    gap: 34px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    color: #bf4800;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    max-width: 560px;
+    font-size: clamp(48px, 7vw, 92px);
+    line-height: 0.96;
+    letter-spacing: 0;
+    font-weight: 700;
+  }
+
+  .hero-copy {
+    max-width: 520px;
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: clamp(19px, 2.1vw, 25px);
+    line-height: 1.25;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+  }
+
+  .pill {
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 22px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .pill.primary {
+    background: var(--blue);
+    color: white;
+  }
+
+  .pill.primary:hover {
+    background: var(--blue-dark);
+  }
+
+  .pill.secondary {
+    background: transparent;
+    color: var(--blue);
+  }
+
+  .pill.secondary:hover {
+    text-decoration: underline;
+  }
+
+  .hero-stage {
+    min-height: 560px;
+    border-radius: 8px;
+    background:
+      linear-gradient(155deg, rgba(255, 255, 255, 0.72), rgba(239, 240, 244, 0.88)),
+      radial-gradient(circle at 74% 20%, rgba(0, 113, 227, 0.16), transparent 30%);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+
+  .hero-device {
+    position: relative;
+    width: min(78vw, 520px);
+    height: 430px;
+  }
+
+  .hero-product-photo {
+    position: absolute;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0 28px 34px rgba(0, 0, 0, 0.16));
+  }
+
+  .hero-product-photo.buds-photo {
+    width: 220px;
+    left: 150px;
+    top: 54px;
+  }
+
+  .hero-product-photo.headphones-photo {
+    width: 250px;
+    left: 14px;
+    top: 170px;
+  }
+
+  .hero-product-photo.speaker-photo {
+    width: 210px;
+    right: 16px;
+    top: 190px;
+  }
+
+  .hero-product-photo.case-photo {
+    width: 170px;
+    right: 42px;
+    top: 46px;
+  }
+
+  .phone {
+    position: absolute;
+    width: 214px;
+    height: 402px;
+    left: 154px;
+    top: 18px;
+    border-radius: 42px;
+    background: #1a1b1f;
+    border: 10px solid #0b0c0f;
+    box-shadow: 0 34px 80px rgba(0, 0, 0, 0.26);
+    overflow: hidden;
+  }
+
+  .phone::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 30px;
+    background:
+      linear-gradient(160deg, rgba(255, 255, 255, 0.16), transparent 32%),
+      linear-gradient(145deg, #232a36, #050506 55%, #14304d);
+  }
+
+  .phone::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 78px;
+    height: 22px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #050506;
+  }
+
+  .watch {
+    position: absolute;
+    width: 144px;
+    height: 168px;
+    left: 42px;
+    top: 210px;
+    border-radius: 36px;
+    background: #0b0c0f;
+    border: 8px solid #dedfe3;
+    box-shadow: 0 28px 54px rgba(0, 0, 0, 0.18);
+  }
+
+  .watch::before,
+  .watch::after {
+    content: "";
+    position: absolute;
+    left: 40px;
+    width: 48px;
+    height: 70px;
+    background: #d4d6dc;
+  }
+
+  .watch::before {
+    top: -72px;
+    border-radius: 18px 18px 4px 4px;
+  }
+
+  .watch::after {
+    bottom: -72px;
+    border-radius: 4px 4px 18px 18px;
+  }
+
+  .watch-face {
+    position: absolute;
+    inset: 14px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #111, #0d2d45 70%);
+  }
+
+  .watch-face::before {
+    content: "10:24";
+    position: absolute;
+    top: 42px;
+    left: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .buds {
+    position: absolute;
+    right: 26px;
+    bottom: 30px;
+    width: 156px;
+    height: 112px;
+    border-radius: 34px 34px 44px 44px;
+    background: #f8f8fa;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 30px 58px rgba(0, 0, 0, 0.16);
+  }
+
+  .buds::before,
+  .buds::after {
+    content: "";
+    position: absolute;
+    top: -54px;
+    width: 42px;
+    height: 84px;
+    border-radius: 24px 24px 20px 20px;
+    background: #ffffff;
+    box-shadow: inset 0 -10px 18px rgba(0, 0, 0, 0.06);
+  }
+
+  .buds::before {
+    left: 36px;
+    transform: rotate(-8deg);
+  }
+
+  .buds::after {
+    right: 36px;
+    transform: rotate(8deg);
+  }
+
+  .section {
+    padding: 86px 22px;
+  }
+
+  .section.white {
+    background: var(--surface);
+  }
+
+  .section-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  .section-title {
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1;
+    letter-spacing: 0;
+    max-width: 620px;
+  }
+
+  .section-note {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.45;
+    max-width: 360px;
+  }
+
+  .filters {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 0 26px;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter {
+    flex: 0 0 auto;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: white;
+    padding: 9px 16px;
+    color: #303036;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .filter.active {
+    color: white;
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .products {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface-soft);
+    border-radius: 8px;
+    min-height: 420px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow);
+  }
+
+  .tag {
+    color: #bf4800;
+    font-size: 12px;
+    font-weight: 700;
+    min-height: 18px;
+  }
+
+  .product-visual {
+    height: 185px;
+    margin: 12px 0 16px;
+    display: grid;
+    place-items: center;
+  }
+
+  .mini-phone,
+  .mini-tablet,
+  .mini-watch,
+  .mini-buds,
+  .mini-speaker,
+  .mini-charger {
+    position: relative;
+    filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.14));
+  }
+
+  .mini-phone {
+    width: 92px;
+    height: 168px;
+    border-radius: 23px;
+    background: linear-gradient(145deg, #242733, #050506);
+    border: 6px solid #101114;
+  }
+
+  .mini-phone::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 38px;
+    height: 11px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #050506;
+  }
+
+  .mini-tablet {
+    width: 154px;
+    height: 110px;
+    border-radius: 18px;
+    border: 7px solid #16171b;
+    background: linear-gradient(135deg, #dce7f6, #f6f6f6 44%, #b5c5d9);
+  }
+
+  .mini-watch {
+    width: 80px;
+    height: 96px;
+    border-radius: 24px;
+    background: linear-gradient(140deg, #121214, #16395a);
+    border: 7px solid #d8d9de;
+  }
+
+  .mini-watch::before,
+  .mini-watch::after {
+    content: "";
+    position: absolute;
+    left: 24px;
+    width: 22px;
+    height: 40px;
+    background: #d8d9de;
+  }
+
+  .mini-watch::before {
+    top: -43px;
+    border-radius: 9px 9px 2px 2px;
+  }
+
+  .mini-watch::after {
+    bottom: -43px;
+    border-radius: 2px 2px 9px 9px;
+  }
+
+  .mini-buds {
+    width: 116px;
+    height: 78px;
+    border-radius: 28px 28px 34px 34px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .mini-buds::before,
+  .mini-buds::after {
+    content: "";
+    position: absolute;
+    top: -42px;
+    width: 30px;
+    height: 64px;
+    border-radius: 20px;
+    background: white;
+  }
+
+  .mini-buds::before {
+    left: 26px;
+    transform: rotate(-7deg);
+  }
+
+  .mini-buds::after {
+    right: 26px;
+    transform: rotate(7deg);
+  }
+
+  .mini-speaker {
+    width: 126px;
+    height: 126px;
+    border-radius: 34px;
+    background: #1f2026;
+  }
+
+  .mini-speaker::before {
+    content: "";
+    position: absolute;
+    inset: 22px;
+    border-radius: 50%;
+    border: 14px solid #3d3f47;
+    background: #121317;
+  }
+
+  .mini-charger {
+    width: 96px;
+    height: 130px;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .mini-charger::before,
+  .mini-charger::after {
+    content: "";
+    position: absolute;
+    top: -18px;
+    width: 10px;
+    height: 24px;
+    border-radius: 999px;
+    background: #c9cad0;
+  }
+
+  .mini-charger::before {
+    left: 29px;
+  }
+
+  .mini-charger::after {
+    right: 29px;
+  }
+
+  .product-name {
+    font-size: 21px;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+
+  .product-desc {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.4;
+    margin-top: 7px;
+    min-height: 40px;
+  }
+
+  .product-foot {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .price {
+    font-weight: 700;
+  }
+
+  .add {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--blue);
+    color: white;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+
+  .add:hover {
+    background: var(--blue-dark);
+  }
+
+  .benefits {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr 0.9fr;
+    gap: 16px;
+  }
+
+  .featured-products {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .home-product {
+    min-height: 410px;
+    background: var(--surface-soft);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-product-img {
+    height: 220px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+  }
+
+  .home-product-img img {
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 220px !important;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    display: block;
+  }
+
+  .home-product h3 {
+    font-size: 22px;
+    line-height: 1.15;
+  }
+
+  .home-product p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.45;
+    margin-top: 8px;
+  }
+
+  .home-product-foot {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .home-product-foot span {
+    font-weight: 700;
+  }
+
+  .home-product-foot a {
+    color: var(--blue);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .benefit {
+    min-height: 280px;
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .benefit.dark {
+    background: #111113;
+    color: white;
+  }
+
+  .benefit h3 {
+    font-size: clamp(25px, 3vw, 36px);
+    line-height: 1.05;
+    letter-spacing: 0;
+    max-width: 360px;
+  }
+
+  .benefit p {
+    color: var(--muted);
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.45;
+    max-width: 360px;
+  }
+
+  .benefit.dark p {
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .cta {
+    text-align: center;
+    padding: 108px 22px;
+    background: #111113;
+    color: white;
+  }
+
+  .cta h2 {
+    font-size: clamp(38px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .cta p {
+    margin: 18px auto 28px;
+    max-width: 520px;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 20px;
+    line-height: 1.35;
+  }
+
+  .footer {
+    background: var(--surface);
+    color: var(--muted);
+    padding: 34px 22px;
+    font-size: 13px;
+  }
+
+  .footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a:hover {
+    color: var(--blue);
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 80px);
+    background: rgba(29, 29, 31, 0.94);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    transition: transform 220ms ease;
+    z-index: 40;
+  }
+
+  .toast.show {
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 980px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .hero-copy,
+    h1 {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .hero-stage {
+      min-height: 460px;
+    }
+
+    .products {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .benefits {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-products {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nav-inner { overflow: hidden; }
+    .brand { flex: 0 0 auto; }
+    .nav-links {
+      flex: 1 1 auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+      white-space: nowrap;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-actions { flex: 0 0 auto; }
+
+    .hero {
+      padding-top: 44px;
+    }
+
+    .hero-stage {
+      min-height: 380px;
+    }
+
+    .hero-device {
+      transform: scale(0.76);
+    }
+
+    .section {
+      padding: 64px 18px;
+    }
+
+    .section-head {
+      display: block;
+    }
+
+    .section-note {
+      margin-top: 12px;
+    }
+
+    .products {
+      grid-template-columns: 1fr;
+    }
+
+    .card {
+      min-height: 390px;
+    }
+
+  }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#">Cellox</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="active" href="index.html">Home</a>
+        <a href="store.html">Store</a>
+        <a href="store.html#buds">Buds</a>
+        <a href="store.html#headphones">Headphones</a>
+        <a href="store.html#speaker">Speaker</a>
+        <a href="store.html#cases">Cases</a>
+        <a href="store.html#screen-guard">Screen Guard</a>
+        <a href="store.html#cards">Cards</a>
+        <a href="#why">Why Cellox</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" aria-label="Search" id="searchBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="icon-btn" type="button" aria-label="Cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 7h12l-1 13H7L6 7Zm3 0a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">New collection</p>
+          <h1>Future-ready gadgets. Beautifully simple.</h1>
+          <p class="hero-copy">Discover earbuds, headphones, speakers, phone cases, screen guards, and smart accessories selected for clean design and everyday reliability.</p>
+          <div class="hero-actions">
+            <a class="pill primary" href="store.html">Visit store</a>
+            <a class="pill secondary" href="contact.html">Contact us</a>
+          </div>
+        </div>
+        <div class="hero-stage" aria-label="Featured Cellox gadgets">
+          <div class="hero-device">
+            <img class="hero-product-photo buds-photo" src="assets/buds.png" alt="Wireless earbuds">
+            <img class="hero-product-photo headphones-photo" src="assets/headphones.png" alt="Wireless headphones">
+            <img class="hero-product-photo speaker-photo" src="assets/speaker.png" alt="Bluetooth speaker">
+            <img class="hero-product-photo case-photo" src="assets/phone-cases.png" alt="Phone cases">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2 class="section-title">Designed around trust.</h2>
+          <p class="section-note">A premium buying experience should feel quiet, fast, and dependable from browsing to delivery.</p>
+        </div>
+        <div class="benefits">
+          <article class="benefit dark">
+            <h3>Certified gadgets only.</h3>
+            <p>Every device is sourced from verified suppliers and checked before shipping.</p>
+          </article>
+          <article class="benefit">
+            <h3>Fast delivery.</h3>
+            <p>Most orders ship within 24 hours with clear tracking from checkout to doorstep.</p>
+          </article>
+          <article class="benefit">
+            <h3>Simple support.</h3>
+            <p>Easy returns, warranty guidance, and human help when you need it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" id="featured">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2 class="section-title">Popular right now.</h2>
+          <p class="section-note">A quick look at the gadgets customers come back for most.</p>
+        </div>
+        <div class="featured-products">
+          <article class="home-product">
+            <div class="home-product-img">
+              <img src="assets/buds.png" alt="AirLite Buds">
+            </div>
+            <h3>AirLite Buds</h3>
+            <p>Compact wireless earbuds for calls, music, and everyday carry.</p>
+            <div class="home-product-foot">
+              <span>Rs. 4,999</span>
+              <a href="store.html#buds">View</a>
+            </div>
+          </article>
+          <article class="home-product">
+            <div class="home-product-img">
+              <img src="assets/headphones.png" alt="Studio Headphones">
+            </div>
+            <h3>Studio Headphones</h3>
+            <p>Soft over-ear comfort with deep wireless sound.</p>
+            <div class="home-product-foot">
+              <span>Rs. 7,999</span>
+              <a href="store.html#headphones">View</a>
+            </div>
+          </article>
+          <article class="home-product">
+            <div class="home-product-img">
+              <img src="assets/phone-cases.png" alt="Flex Phone Case">
+            </div>
+            <h3>Flex Phone Case</h3>
+            <p>Slim protection in clear, matte, and soft color finishes.</p>
+            <div class="home-product-foot">
+              <span>Rs. 799</span>
+              <a href="store.html#cases">View</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="support">
+      <h2>Upgrade without the noise.</h2>
+      <p>Clean products, clear support, and a checkout experience that stays out of your way.</p>
+      <a class="pill primary" href="store.html">Visit store</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Copyright 2026 Cellox. All rights reserved.</p>
+      <div class="footer-links" aria-label="Footer links">
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="returns.html">Returns</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Added to cart</div>
+
+<script>
+  document.getElementById("searchBtn").addEventListener("click", () => {
+    window.location.href = "store.html";
+  });
+</script>
+</body>
+</html>
