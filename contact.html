@@ -6,13 +6,14 @@
 <title>Contact - Cellox</title>
 <style>
   :root {
-    --page: #f5f5f7;
-    --surface: #ffffff;
-    --text: #1d1d1f;
-    --muted: #6e6e73;
-    --line: rgba(0, 0, 0, 0.1);
-    --blue: #0071e3;
-    --ink: #111113;
+    --page: #f7f3ec;
+    --surface: #fffaf2;
+    --text: #1f2724;
+    --muted: #6f756f;
+    --line: rgba(31, 39, 36, 0.14);
+    --blue: #087f75;
+    --accent: #c06c27;
+    --ink: #16231f;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -27,8 +28,8 @@
     top: 0;
     z-index: 20;
     height: 48px;
-    background: rgba(245, 245, 247, 0.82);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(247, 243, 236, 0.86);
+    border-bottom: 1px solid rgba(31, 39, 36, 0.1);
     backdrop-filter: blur(18px) saturate(180%);
   }
   .nav-inner {
@@ -46,17 +47,17 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    color: #38383d;
+    color: #4b5550;
     font-size: 12px;
   }
-  .nav-links a.active { color: #000; font-weight: 700; }
+  .nav-links a.active { color: var(--text); font-weight: 700; }
   .hero {
     max-width: 1120px;
     margin: 0 auto;
     padding: 78px 22px 42px;
   }
   .eyebrow {
-    color: #bf4800;
+    color: var(--accent);
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 12px;
@@ -109,7 +110,7 @@
   .wide {
     grid-column: span 2;
     min-height: 280px;
-    background: #111113;
+    background: var(--ink);
     color: white;
   }
   .wide p,
@@ -130,9 +131,9 @@
     min-height: 280px;
     border-radius: 8px;
     background:
-      linear-gradient(90deg, transparent 31px, rgba(0, 0, 0, 0.06) 32px),
-      linear-gradient(transparent 31px, rgba(0, 0, 0, 0.06) 32px),
-      #e9ebef;
+      linear-gradient(90deg, transparent 31px, rgba(31, 39, 36, 0.07) 32px),
+      linear-gradient(transparent 31px, rgba(31, 39, 36, 0.07) 32px),
+      #e7ded0;
     background-size: 32px 32px;
     position: relative;
     overflow: hidden;
@@ -141,7 +142,7 @@
     content: "";
     position: absolute;
     inset: 64px 72px;
-    border: 10px solid rgba(0, 113, 227, 0.32);
+    border: 10px solid rgba(8, 127, 117, 0.36);
     border-left-color: transparent;
     border-radius: 48% 42% 56% 44%;
     transform: rotate(-18deg);
@@ -151,7 +152,7 @@
     position: absolute;
     left: 28px;
     bottom: 28px;
-    background: white;
+    background: var(--surface);
     color: var(--text);
     border-radius: 999px;
     padding: 11px 16px;

@@ -6,17 +6,18 @@
 <title>Cellox - Minimal Tech Store</title>
 <style>
   :root {
-    --page: #f5f5f7;
-    --surface: #ffffff;
-    --surface-soft: #fbfbfd;
-    --text: #1d1d1f;
-    --muted: #6e6e73;
-    --line: rgba(0, 0, 0, 0.1);
-    --blue: #0071e3;
-    --blue-dark: #005bb5;
-    --green: #2f8f64;
-    --ink: #111113;
-    --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+    --page: #f7f3ec;
+    --surface: #fffaf2;
+    --surface-soft: #f1ebe1;
+    --text: #1f2724;
+    --muted: #6f756f;
+    --line: rgba(31, 39, 36, 0.14);
+    --blue: #087f75;
+    --blue-dark: #05645c;
+    --green: #3f8b65;
+    --accent: #c06c27;
+    --ink: #16231f;
+    --shadow: 0 18px 45px rgba(31, 39, 36, 0.12);
   }
 
   * {
@@ -50,8 +51,8 @@
     top: 0;
     z-index: 20;
     height: 48px;
-    background: rgba(245, 245, 247, 0.82);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(247, 243, 236, 0.86);
+    border-bottom: 1px solid rgba(31, 39, 36, 0.1);
     backdrop-filter: blur(18px) saturate(180%);
   }
 
@@ -76,12 +77,12 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    color: #38383d;
+    color: #4b5550;
     font-size: 12px;
   }
 
   .nav-links a.active {
-    color: #000;
+    color: var(--text);
     font-weight: 700;
   }
 
@@ -104,7 +105,7 @@
   }
 
   .icon-btn:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: rgba(8, 127, 117, 0.1);
   }
 
   .cart-count {
@@ -143,7 +144,7 @@
   }
 
   .eyebrow {
-    color: #bf4800;
+    color: var(--accent);
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 12px;
@@ -207,8 +208,9 @@
     min-height: 560px;
     border-radius: 8px;
     background:
-      linear-gradient(155deg, rgba(255, 255, 255, 0.72), rgba(239, 240, 244, 0.88)),
-      radial-gradient(circle at 74% 20%, rgba(0, 113, 227, 0.16), transparent 30%);
+      linear-gradient(155deg, rgba(255, 250, 242, 0.86), rgba(229, 219, 204, 0.9)),
+      radial-gradient(circle at 74% 20%, rgba(8, 127, 117, 0.2), transparent 30%),
+      radial-gradient(circle at 18% 78%, rgba(192, 108, 39, 0.16), transparent 28%);
     position: relative;
     overflow: hidden;
     display: grid;
@@ -425,7 +427,7 @@
     border-radius: 999px;
     background: white;
     padding: 9px 16px;
-    color: #303036;
+    color: #35413b;
     cursor: pointer;
     font-size: 14px;
   }
@@ -459,7 +461,7 @@
   }
 
   .tag {
-    color: #bf4800;
+    color: var(--accent);
     font-size: 12px;
     font-weight: 700;
     min-height: 18px;
@@ -733,7 +735,7 @@
   }
 
   .benefit.dark {
-    background: #111113;
+    background: var(--ink);
     color: white;
   }
 
@@ -759,7 +761,7 @@
   .cta {
     text-align: center;
     padding: 108px 22px;
-    background: #111113;
+    background: var(--ink);
     color: white;
   }
 
@@ -985,41 +987,7 @@
           <h2 class="section-title">Popular right now.</h2>
           <p class="section-note">A quick look at the gadgets customers come back for most.</p>
         </div>
-        <div class="featured-products">
-          <article class="home-product">
-            <div class="home-product-img">
-              <img src="assets/buds.png" alt="AirLite Buds">
-            </div>
-            <h3>AirLite Buds</h3>
-            <p>Compact wireless earbuds for calls, music, and everyday carry.</p>
-            <div class="home-product-foot">
-              <span>Rs. 4,999</span>
-              <a href="store.html#buds">View</a>
-            </div>
-          </article>
-          <article class="home-product">
-            <div class="home-product-img">
-              <img src="assets/headphones.png" alt="Studio Headphones">
-            </div>
-            <h3>Studio Headphones</h3>
-            <p>Soft over-ear comfort with deep wireless sound.</p>
-            <div class="home-product-foot">
-              <span>Rs. 7,999</span>
-              <a href="store.html#headphones">View</a>
-            </div>
-          </article>
-          <article class="home-product">
-            <div class="home-product-img">
-              <img src="assets/phone-cases.png" alt="Flex Phone Case">
-            </div>
-            <h3>Flex Phone Case</h3>
-            <p>Slim protection in clear, matte, and soft color finishes.</p>
-            <div class="home-product-foot">
-              <span>Rs. 799</span>
-              <a href="store.html#cases">View</a>
-            </div>
-          </article>
-        </div>
+        <div class="featured-products" id="featuredProducts"></div>
       </div>
     </section>
 
@@ -1044,10 +1012,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite">Added to cart</div>
 
-<script>
-  document.getElementById("searchBtn").addEventListener("click", () => {
-    window.location.href = "store.html";
-  });
-</script>
+<script src="app.js"></script>
 </body>
 </html>

@@ -6,16 +6,17 @@
 <title>Store - Cellox</title>
 <style>
   :root {
-    --page: #f5f5f7;
-    --surface: #ffffff;
-    --surface-soft: #fbfbfd;
-    --text: #1d1d1f;
-    --muted: #6e6e73;
-    --line: rgba(0, 0, 0, 0.1);
-    --blue: #0071e3;
-    --blue-dark: #005bb5;
-    --ink: #111113;
-    --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+    --page: #f7f3ec;
+    --surface: #fffaf2;
+    --surface-soft: #f1ebe1;
+    --text: #1f2724;
+    --muted: #6f756f;
+    --line: rgba(31, 39, 36, 0.14);
+    --blue: #087f75;
+    --blue-dark: #05645c;
+    --accent: #c06c27;
+    --ink: #16231f;
+    --shadow: 0 18px 45px rgba(31, 39, 36, 0.12);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,8 +35,8 @@
     top: 0;
     z-index: 20;
     height: 48px;
-    background: rgba(245, 245, 247, 0.82);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(247, 243, 236, 0.86);
+    border-bottom: 1px solid rgba(31, 39, 36, 0.1);
     backdrop-filter: blur(18px) saturate(180%);
   }
   .nav-inner {
@@ -53,10 +54,10 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    color: #38383d;
+    color: #4b5550;
     font-size: 12px;
   }
-  .nav-links a.active { color: #000; font-weight: 700; }
+  .nav-links a.active { color: var(--text); font-weight: 700; }
   .nav-actions { display: flex; align-items: center; gap: 8px; }
   .icon-btn {
     width: 32px;
@@ -69,7 +70,7 @@
     place-items: center;
     cursor: pointer;
   }
-  .icon-btn:hover { background: rgba(0, 0, 0, 0.06); }
+  .icon-btn:hover { background: rgba(8, 127, 117, 0.1); }
   .cart-count {
     min-width: 16px;
     height: 16px;
@@ -121,6 +122,7 @@
     cursor: pointer;
   }
   .category:hover .category-name { color: var(--blue); }
+  .category.active .category-name { color: var(--blue); }
   .category-art {
     width: 148px;
     height: 124px;
@@ -175,7 +177,7 @@
     min-height: 48px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: #fff;
+    background: var(--surface);
     padding: 0 18px;
     display: flex;
     align-items: center;
@@ -206,6 +208,24 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
   }
+  .empty-state {
+    grid-column: 1 / -1;
+    min-height: 220px;
+    border-radius: 8px;
+    background: var(--surface-soft);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 28px;
+  }
+  .empty-state h3 {
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .empty-state p {
+    color: var(--muted);
+    font-size: 16px;
+  }
   .card {
     background: var(--surface-soft);
     border-radius: 8px;
@@ -219,7 +239,7 @@
   }
   .card:hover { box-shadow: var(--shadow); }
   .tag {
-    color: #bf4800;
+    color: var(--accent);
     font-size: 12px;
     font-weight: 700;
     min-height: 18px;
@@ -317,7 +337,7 @@
   .promo {
     margin-top: 54px;
     border-radius: 8px;
-    background: #111113;
+    background: var(--ink);
     color: white;
     padding: 34px;
     display: grid;
@@ -522,66 +542,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite">Added to cart</div>
 
-<script>
-  const products = [
-    { name: "AirLite Buds", image: "assets/buds.png", tag: "Popular", desc: "Compact wireless earbuds with clear calls and long battery life.", price: "Rs. 4,999" },
-    { name: "Studio Headphones", image: "assets/headphones.png", tag: "New", desc: "Over-ear wireless headphones with soft cushions and deep bass.", price: "Rs. 7,999" },
-    { name: "Pulse Speaker", image: "assets/speaker.png", tag: "", desc: "Portable Bluetooth speaker with rich room-filling sound.", price: "Rs. 3,499" },
-    { name: "Flex Phone Case", image: "assets/phone-cases.png", tag: "Best seller", desc: "Slim protective cases in clear, matte, and pastel finishes.", price: "Rs. 799" },
-    { name: "Crystal Screen Guard", image: "assets/screen-guard.png", tag: "", desc: "Tempered glass screen protector with smooth touch response.", price: "Rs. 499" },
-    { name: "Smart Access Card", image: "assets/smart-card.png", tag: "Compact", desc: "Sleek NFC card accessory for everyday digital convenience.", price: "Rs. 1,299" }
-  ];
-
-  const productGrid = document.getElementById("productGrid");
-  const cartCount = document.getElementById("cartCount");
-  const toast = document.getElementById("toast");
-  const productSearch = document.getElementById("productSearch");
-  const resultNote = document.getElementById("resultNote");
-  let cart = 0;
-
-  function renderProducts(list) {
-    resultNote.textContent = `${list.length} ${list.length === 1 ? "product" : "products"}`;
-    productGrid.innerHTML = list.map((product) => `
-    <article class="card">
-      <p class="tag">${product.tag}</p>
-      <div class="product-visual" aria-hidden="true">
-        <img src="${product.image}" alt="">
-      </div>
-      <h3 class="product-name">${product.name}</h3>
-      <p class="product-desc">${product.desc}</p>
-      <div class="product-foot">
-        <span class="price">${product.price}</span>
-        <button class="add" type="button" aria-label="Add ${product.name} to cart" data-add>+</button>
-      </div>
-    </article>
-    `).join("");
-  }
-
-  renderProducts(products);
-
-  productSearch.addEventListener("input", () => {
-    const term = productSearch.value.trim().toLowerCase();
-    const visible = products.filter((product) => `${product.name} ${product.desc}`.toLowerCase().includes(term));
-    renderProducts(visible);
-  });
-
-  productGrid.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-add]");
-    if (!button) return;
-    cart += 1;
-    cartCount.textContent = cart;
-    cartCount.classList.add("show");
-    button.textContent = "OK";
-    toast.classList.add("show");
-    window.setTimeout(() => {
-      button.textContent = "+";
-      toast.classList.remove("show");
-    }, 1300);
-  });
-
-  document.getElementById("searchBtn").addEventListener("click", () => {
-    document.getElementById("products").scrollIntoView({ behavior: "smooth" });
-  });
-</script>
+<script src="app.js"></script>
 </body>
 </html>
